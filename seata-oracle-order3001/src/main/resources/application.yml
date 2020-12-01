@@ -1,0 +1,60 @@
+server:
+  port: 3001
+spring:
+  application:
+    name: seata-order-service
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 10.18.111.17:8848
+  datasource:
+    driver-class-name: oracle.jdbc.driver.OracleDriver
+    url: jdbc:oracle:thin:@10.18.111.28:1521:PROD1
+    username: cqtest
+    password: cqtest
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      driver-class-name: oracle.jdbc.driver.OracleDriver
+      username: cqtest
+      jdbc-url: jdbc:oracle:thin:@10.18.111.28:1521:PROD1
+      password: cqtest
+
+feign:
+  hystrix:
+    enabled: false
+  httpclient:
+    connection-timeout: 5000
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  #ID全局策略配置
+  global-config:
+    db-config:
+      id-type: uuid
+  type-aliases-package: cn.com.chenxin.entity
+  mapper-locations: classpath:mapper/*.xml
+
+logging:
+  level:
+    io:
+      seata: info
+seata:
+  tx-service-group: chenxin_tx_group
+  config:
+    type: file
+    file:
+      name: file.conf
+  service:
+    grouplist:
+      default: 10.18.111.17:8091
+  registry:
+    type: nacos
+    nacos:
+      server-addr: 10.18.111.17:8848
+      cluster: default
+      group: SEATA_GROUP
+
+  client:
+    undo:
+      log-serialization: kryo
